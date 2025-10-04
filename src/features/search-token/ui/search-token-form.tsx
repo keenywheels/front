@@ -23,7 +23,7 @@ export const SearchTokenForm = () => {
         onChange={(e) => setToken(e.target.value)}
         required
       />
-      <Button type="submit">Искать</Button>
+      <Button type="submit">Поиск</Button>
     </form>
   );
 };
