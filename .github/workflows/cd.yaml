@@ -1,16 +1,14 @@
 name: cd
 
 on:
-  workflow_run:
-    workflows: [ "ci" ]
-    types:
-      - completed
+  push:
+    branches:
+      - main
 
 jobs:
   build:
     name: build
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' }}
 
     steps:
       - name: Checkout repo
@@ -56,8 +54,8 @@ jobs:
       - name: Checkout deploy repo
         uses: actions/checkout@v3
         with:
-          repository: keenywheels/deploy
-          path: deploy
+          repository: keenywheels/deployer
+          path: deployer
 
       - name: Setup ssh key
         uses: webfactory/ssh-agent@v0.9.1
@@ -65,7 +63,7 @@ jobs:
           ssh-private-key: ${{ secrets.PROD_SSH_KEY }}
 
       - name: Copy frontend to server
-        run: ansible-playbook -i deploy/inventory/hosts.ini deploy/playbooks/deploy-front.yaml
+        run: ansible-playbook -i deployer/inventory/hosts.ini deployer/playbooks/deploy-front.yaml
         env:
           ANSIBLE_HOST_KEY_CHECKING: False
           VIXAR_DIST_PATH: ${{ github.workspace }}/dist
