@@ -1,1 +1,1 @@
-export { RootLayoutPage } from './ui/root-layout-page';
+export { RootLayoutPage as default } from './ui/root-layout-page';

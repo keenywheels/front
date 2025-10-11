@@ -1,1 +1,1 @@
-export { SearchTokenPage } from './ui/search-token-page';
+export { SearchTokenPage as default } from './ui/search-token-page';
