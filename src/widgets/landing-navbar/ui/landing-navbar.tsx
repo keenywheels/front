@@ -2,31 +2,31 @@
 
 import { useState } from 'react';
 
-import { Menu } from 'lucide-react';
+import { Home, Menu, Search, Star } from 'lucide-react';
 
-import { Button } from '@shared/ui/button';
+import { Button } from '@shared/ui/button.tsx';
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-} from '@shared/ui/navigation-menu';
+} from '@shared/ui/navigation-menu.tsx';
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@shared/ui/sheet';
-import { SmoothLink } from '@shared/ui/smooth-link';
+} from '@shared/ui/sheet.tsx';
+import { SmoothLink } from '@shared/ui/smooth-link.tsx';
 
 const navigationItems = [
-  { name: 'Главная', href: '#hero' },
-  { name: 'Преимущества', href: '#features' },
-  { name: 'Поиск', href: '/search/' },
+  { name: 'Главная', href: '#hero', icon: Home },
+  { name: 'Преимущества', href: '#features', icon: Star },
+  { name: 'Поиск', href: '/search/', icon: Search },
 ];
 
-export const Navbar = () => {
+export const LandingNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -35,9 +35,11 @@ export const Navbar = () => {
         <div className="flex items-center space-x-2">
           <SmoothLink
             to="/"
-            className="flex items-center space-x-2 cursor-pointer"
+            className="flex items-center space-x-2 px-4 cursor-pointer"
           >
-            <span className="text-3xl font-stretch-125% font-bold">Vixar</span>
+            <span className="text-3xl font-stretch-125% font-bold text-primary">
+              Vixar
+            </span>
           </SmoothLink>
         </div>
 
@@ -75,14 +77,16 @@ export const Navbar = () => {
             side="right"
             className="w-full sm:w-[400px] p-0 flex flex-col"
           >
-            <SheetHeader className="px-9 py-6 border-b">
+            <SheetHeader className="px-8 h-16 border-b">
               <SheetTitle className="text-lg font-semibold">
                 <SmoothLink
                   to="/"
                   className="flex items-center space-x-2 cursor-pointer"
                   onNavigateEnd={() => setIsOpen(false)}
                 >
-                  <span className="font-bold">Vixar</span>
+                  <span className="text-3xl font-stretch-125% font-bold text-primary">
+                    Vixar
+                  </span>
                 </SmoothLink>
               </SheetTitle>
             </SheetHeader>
@@ -92,10 +96,13 @@ export const Navbar = () => {
                 <SmoothLink
                   key={item.name}
                   to={item.href}
-                  className="block px-4 py-3 rounded-lg hover:bg-accent hover:text-accent-foreground cursor-pointer"
+                  className="flex items-center gap-3 px-4 py-2 my-4 rounded-lg hover:bg-accent hover:text-accent-foreground cursor-pointer"
                   onNavigateEnd={() => setIsOpen(false)}
                 >
-                  {item.name}
+                  {item.icon && (
+                    <item.icon className="h-5 w-5 xl:hidden flex-shrink-0" />
+                  )}
+                  <span>{item.name}</span>
                 </SmoothLink>
               ))}
             </nav>
