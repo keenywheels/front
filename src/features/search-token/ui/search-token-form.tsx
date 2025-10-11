@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { Button } from '@shared/ui/button.tsx';
 import { Input } from '@shared/ui/input.tsx';

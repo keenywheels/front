@@ -14,7 +14,7 @@ export const PageLayout = forwardRef(function PageLayout(
   {
     children,
     className,
-    hasHorizontalPaddings = true,
+    hasHorizontalPaddings = false,
     hasBottomPadding = false,
   }: PageLayoutProps,
   ref: ForwardedRef<HTMLDivElement>,
