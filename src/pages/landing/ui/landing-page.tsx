@@ -1,20 +1,18 @@
-import { FooterSection } from '@pages/landing/ui/footer.tsx';
-import { PageLayout } from '@shared/ui/page-layout.tsx';
+import { LandingNavbar } from '@widgets/landing-navbar';
 
-import { FeaturesSection } from './features.tsx';
+import { FeaturesSection } from './features';
+import { FooterSection } from './footer';
 import { HeroSection } from './hero';
-import { Navbar } from './navbar';
 
 export const LandingPage = () => {
   return (
-    <PageLayout className="min-h-screen bg-background">
-      <Navbar />
-
-      <main>
+    <div className="min-h-screen bg-background">
+      <LandingNavbar />
+      <main className="flex-1">
         <HeroSection />
         <FeaturesSection />
-        <FooterSection />
       </main>
-    </PageLayout>
+      <FooterSection />
+    </div>
   );
 };

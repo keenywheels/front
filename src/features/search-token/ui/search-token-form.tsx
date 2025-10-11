@@ -12,13 +12,10 @@ export const SearchTokenForm = () => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex w-full max-w-sm items-center gap-2"
-    >
+    <form onSubmit={handleSubmit} className="flex w-full items-center gap-2">
       <Input
         type="search"
-        placeholder="Токен"
+        placeholder="Ключевое слово"
         value={token}
         onChange={(e) => setToken(e.target.value)}
         required
