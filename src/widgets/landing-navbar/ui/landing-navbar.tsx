@@ -106,6 +106,18 @@ export const LandingNavbar = () => {
                 </SmoothLink>
               ))}
             </nav>
+
+            <div className="p-6 flex-shrink-0">
+              <Button asChild className="w-full">
+                <SmoothLink
+                  to="/search/"
+                  onNavigateEnd={() => setIsOpen(false)}
+                  className="w-full text-center"
+                >
+                  Попробовать
+                </SmoothLink>
+              </Button>
+            </div>
           </SheetContent>
         </Sheet>
       </div>
