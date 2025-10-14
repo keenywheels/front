@@ -4,6 +4,7 @@ import type { RouteConfig } from '@shared/lib/router';
 
 const LandingPage = lazy(() => import('@pages/landing'));
 const SearchTokenPage = lazy(() => import('@pages/search-token'));
+const SearchResultPage = lazy(() => import('@pages/search-result'));
 
 export const routes: RouteConfig[] = [
   {
@@ -13,5 +14,9 @@ export const routes: RouteConfig[] = [
   {
     path: '/search/',
     element: <SearchTokenPage />,
+  },
+  {
+    path: '/search/result/',
+    element: <SearchResultPage />,
   },
 ];
