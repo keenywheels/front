@@ -1,0 +1,10 @@
+# react router
+/.react-router/
+/build/
+/node_modules/
+
+# ide
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
