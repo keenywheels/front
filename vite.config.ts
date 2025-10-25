@@ -6,4 +6,9 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 export default defineConfig({
   plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
   envPrefix: 'VXR_',
+  resolve: {
+    alias: {
+      'react-dom/server': 'react-dom/server.node',
+    },
+  },
 });
