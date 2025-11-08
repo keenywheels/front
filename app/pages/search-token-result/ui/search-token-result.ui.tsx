@@ -15,7 +15,6 @@ export const SearchTokenResultPage = () => {
   const tokens = useLoaderData<Route.ClientLoaderData>();
   const tokenInfo = tokens.length > 0 ? tokens[0] : [];
 
-  console.log(tokenInfo);
   const interestData: TokenInterestChartDataItem[] =
     tokenInfo?.records?.map((item: SearchResultRecord) => ({
       date: item.timestamp,
