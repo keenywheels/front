@@ -6,7 +6,7 @@ import { XIcon } from 'lucide-react';
 
 import * as SheetPrimitive from '@radix-ui/react-dialog';
 
-import { cn } from '@shared/lib/utils';
+import { cn } from '@shared/lib/utils/cls';
 
 const Sheet = ({
   ...props

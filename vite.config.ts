@@ -3,12 +3,16 @@ import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-export default defineConfig({
-  plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
-  envPrefix: 'VXR_',
-  resolve: {
-    alias: {
-      'react-dom/server': 'react-dom/server.node',
+export default defineConfig(({ mode }) => {
+  const isProd = mode === 'production';
+
+  return {
+    plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
+    envPrefix: 'VXR_',
+    resolve: {
+      alias: {
+        ...(isProd ? { 'react-dom/server': 'react-dom/server.node' } : {}),
+      },
     },
-  },
+  };
 });
