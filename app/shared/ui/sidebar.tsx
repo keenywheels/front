@@ -5,8 +5,8 @@ import { PanelLeftIcon } from 'lucide-react';
 
 import { Slot } from '@radix-ui/react-slot';
 
-import { useIsMobile } from '@shared/hooks/useMobile';
-import { cn } from '@shared/lib/utils';
+import { useIsMobile } from '@shared/lib/hooks/use-mobile';
+import { cn } from '@shared/lib/utils/cls';
 import { Button } from '@shared/ui/button';
 import { Input } from '@shared/ui/input';
 import { Separator } from '@shared/ui/separator';

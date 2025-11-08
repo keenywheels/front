@@ -7,5 +7,5 @@ export const routes = {
 const API_URL = import.meta.env.VXR_API_BASE_URL;
 
 export const apiRoutes = {
-  interestAll: `${API_URL}/api/v1/interest/all`,
+  searchToken: `${API_URL}/api/v1/token/search`,
 };

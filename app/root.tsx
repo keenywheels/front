@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   isRouteErrorResponse,
   Links,
@@ -7,7 +8,8 @@ import {
   ScrollRestoration,
 } from 'react-router';
 
-import { Providers } from '@shared/providers/providers';
+import { SidebarConfigProvider } from '@shared/lib/providers/sidebar-config';
+import { ThemeProvider } from '@shared/lib/providers/theme';
 
 import type { Route } from './+types/root';
 
@@ -61,7 +63,9 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         <Links />
       </head>
       <body>
-        <Providers>{children}</Providers>
+        <ThemeProvider defaultTheme="light" storageKey="theme">
+          <SidebarConfigProvider>{children}</SidebarConfigProvider>
+        </ThemeProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
