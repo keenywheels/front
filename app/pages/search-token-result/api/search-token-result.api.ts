@@ -13,7 +13,7 @@ export async function clientLoader({
 
   const token = url.searchParams.get('token');
   if (!token) {
-    throw new Response('missing query parameter: token', { status: 400 });
+    return { error: 'missing query parameter' };
   }
 
   let start = url.searchParams.get('start');

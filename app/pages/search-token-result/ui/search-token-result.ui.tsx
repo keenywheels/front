@@ -1,6 +1,7 @@
-import { useLoaderData } from 'react-router';
+import { Navigate, useLoaderData } from 'react-router';
 
 import type { SearchResultRecord } from '@entities/token';
+import { routes } from '@shared/config/routes';
 import { Label } from '@shared/ui/label';
 import {
   TokenInterestChart,
@@ -13,6 +14,10 @@ import type { Route } from './+types/search-token-result';
 
 export const SearchTokenResultPage = () => {
   const tokens = useLoaderData<Route.ClientLoaderData>();
+  if ('error' in tokens) {
+    return <Navigate to={routes.searchToken} replace />;
+  }
+
   const tokenInfo = tokens.length > 0 ? tokens[0] : [];
 
   const interestData: TokenInterestChartDataItem[] =

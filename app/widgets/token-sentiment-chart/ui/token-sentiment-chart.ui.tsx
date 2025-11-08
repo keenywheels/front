@@ -3,11 +3,7 @@
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui/card';
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from '@shared/ui/chart';
+import { ChartContainer } from '@shared/ui/chart';
 
 export interface SentimentChartDataItem {
   date: string;
@@ -76,7 +72,8 @@ export function SentimentChart({
               stroke="none"
               fill="var(--red)"
               fillOpacity={0.3}
-              isAnimationActive={true}
+              isAnimationActive={false}
+              dot={false}
             />
 
             <Area
@@ -85,22 +82,8 @@ export function SentimentChart({
               stroke="none"
               fill="var(--green)"
               fillOpacity={0.3}
-              isAnimationActive={true}
-            />
-
-            <ChartTooltip
-              cursor={false}
-              content={
-                <ChartTooltipContent
-                  labelFormatter={(value) =>
-                    new Date(value).toLocaleDateString('ru-RU', {
-                      month: 'short',
-                      day: 'numeric',
-                    })
-                  }
-                  indicator="dot"
-                />
-              }
+              isAnimationActive={false}
+              dot={false}
             />
           </AreaChart>
         </ChartContainer>
