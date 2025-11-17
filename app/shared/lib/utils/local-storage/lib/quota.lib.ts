@@ -22,9 +22,7 @@ const isQuotaExceededError = (err: unknown): boolean =>
     err.name === 'QUOTA_EXCEEDED_ERR');
 
 export const checkQuota = <V>(value: V): boolean => {
-  const storage = new LocalStorage<V>('__check_quota__', {
-    error: { catcher: false },
-  });
+  const storage = new LocalStorage<V>('__check_quota__');
 
   try {
     storage.set(value);

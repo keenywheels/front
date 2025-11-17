@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VXR_API_BASE_UR || '';
+const API_URL = import.meta.env.VXR_API_BASE_URL || '';
 
 export async function request<B, T>(
   url: string,
