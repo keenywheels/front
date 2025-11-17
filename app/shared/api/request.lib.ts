@@ -1,5 +1,3 @@
-const API_URL = import.meta.env.VXR_API_BASE_URL || '';
-
 export async function request<B, T>(
   url: string,
   method = 'get',
@@ -8,7 +6,7 @@ export async function request<B, T>(
 ): Promise<T | { error: string }> {
   const controller = new AbortController();
   try {
-    const res = await fetch(`${API_URL}${url}`, {
+    const res = await fetch(url, {
       method: method.toUpperCase(),
       signal: controller.signal,
       body: typeof body === 'object' ? JSON.stringify(body) : undefined,
