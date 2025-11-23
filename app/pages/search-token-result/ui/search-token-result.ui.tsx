@@ -52,7 +52,7 @@ export const SearchTokenResultPage = () => {
   const isLoading = navigation.state === 'loading';
 
   if ('error' in loaderData) {
-    console.error('loader rrror:', loaderData.error);
+    console.error('loader error:', loaderData.error);
     return <Navigate to={routes.searchToken} replace />;
   }
 

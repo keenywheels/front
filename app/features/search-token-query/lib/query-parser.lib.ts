@@ -14,7 +14,7 @@ export const createQueryEval = (
   const transformedQuery = query.replace(
     /token\s*\(\s*['"]([^'"]+)['"]\s*\)/g,
     (_, tokenName: string) => {
-      if (!/^[a-zA-Z0-9\s-]+$/.test(tokenName)) {
+      if (!/^[а-яА-Яa-zA-Z0-9\s-]+$/.test(tokenName)) {
         throw new Error(`invalid token name: ${tokenName}`);
       }
       return `data['${tokenName}']`;
