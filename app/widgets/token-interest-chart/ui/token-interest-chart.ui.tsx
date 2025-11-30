@@ -16,6 +16,8 @@ import {
   ChartTooltipContent,
 } from '@shared/ui/chart';
 
+import { Tooltip } from './tooltip.ui';
+
 export interface TokenInterestChartDataItem {
   date: string;
   [key: string]: string | number;
@@ -57,8 +59,9 @@ export const TokenInterestChart: React.FC<TokenInterestChartProps> = ({
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex flex-row">
         <CardTitle>{title}</CardTitle>
+        <Tooltip className="ml-2" />
       </CardHeader>
       <CardContent>
         <ChartContainer config={lines} className={className}>

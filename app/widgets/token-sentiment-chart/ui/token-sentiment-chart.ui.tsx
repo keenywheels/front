@@ -5,6 +5,8 @@ import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui/card';
 import { ChartContainer } from '@shared/ui/chart';
 
+import { Tooltip } from './tooltip.ui';
+
 export interface SentimentChartDataItem {
   date: string;
   value: number;
@@ -34,8 +36,9 @@ export function SentimentChart({
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex flex-row">
         <CardTitle>{title}</CardTitle>
+        <Tooltip className="ml-2" />
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className={className}>
