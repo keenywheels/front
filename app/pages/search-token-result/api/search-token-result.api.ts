@@ -1,11 +1,8 @@
 import { type SearchResultResponse, searchToken } from '@entities/token';
+import { isQuery } from '@entities/token';
 import { executeQuerySearch } from '@features/search-token-query';
 
 import type { Route } from './+types/search-token-result';
-
-const isQuery = (query: string): boolean => {
-  return /token\(|[+*/-]/.test(query);
-};
 
 export async function clientLoader({
   request,

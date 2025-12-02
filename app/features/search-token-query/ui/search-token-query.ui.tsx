@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useNavigation, useSearchParams } from 'react-router';
 
+import { isQuery } from '@entities/token';
 import { routes } from '@shared/config/routes';
 import { Button } from '@shared/ui/button';
 import { Input } from '@shared/ui/input';
@@ -18,14 +19,25 @@ export const SearchTokenQuery = () => {
     setQuery(searchParams.get('query') || '');
   }, [searchParams]);
 
+  const formatQuery = (input: string): string => {
+    const trimmed = input.trim();
+
+    if (isQuery(trimmed)) {
+      return trimmed;
+    } else {
+      return `token('${trimmed}')`;
+    }
+  };
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!query.trim()) {
       return;
     }
 
+    const formattedQuery = formatQuery(query);
     const params = new URLSearchParams();
-    params.set('query', query);
+    params.set('query', formattedQuery);
 
     navigate({
       pathname: routes.searchResult,
