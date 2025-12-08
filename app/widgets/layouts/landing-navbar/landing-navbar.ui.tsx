@@ -5,6 +5,7 @@ import { Link } from 'react-router';
 
 import { Home, Menu, Search, Star } from 'lucide-react';
 
+import { VKIDButton } from '@features/vkid-button';
 import { routes } from '@shared/config/routes';
 import { cn } from '@shared/lib/utils/cls';
 import { Button } from '@shared/ui/button';
@@ -70,9 +71,7 @@ export const LandingNavbar = ({ className }: LandingNavbarProps) => {
         </NavigationMenu>
 
         <div className="hidden xl:flex items-center space-x-2">
-          <Button asChild className="cursor-pointer">
-            <Link to={routes.searchToken}>Попробовать</Link>
-          </Button>
+          <VKIDButton />
         </div>
 
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -117,15 +116,7 @@ export const LandingNavbar = ({ className }: LandingNavbarProps) => {
             </nav>
 
             <div className="p-6 flex-shrink-0">
-              <Button asChild className="w-full">
-                <Link
-                  to={routes.searchToken}
-                  className="w-full text-center"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Попробовать
-                </Link>
-              </Button>
+              <VKIDButton />
             </div>
           </SheetContent>
         </Sheet>
