@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 
 import * as VKID from '@vkid/sdk';
 
-import { authCallback } from '@entities/auth';
+import { authCallback, type AuthCallbackResponse, registerUser } from '@entities/auth';
 import { BASE_URL } from '@shared/config/routes';
 import { initVKID } from '@shared/config/vkid';
 import { genCodeVerifier } from '@shared/lib/utils/pkce/pkce';
+import { Button } from '@shared/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -14,7 +15,6 @@ import {
   DialogTitle,
 } from '@shared/ui/dialog';
 import { Input } from '@shared/ui/input';
-import { Button } from '@shared/ui/button';
 
 export const VKIDButton = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -26,6 +26,8 @@ export const VKIDButton = () => {
   } | null>(null);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
+  const [vkid, setVKID] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const codeVerifier = genCodeVerifier();
@@ -44,13 +46,17 @@ export const VKIDButton = () => {
           async (payload: { code: never; state: never; device_id: never }) => {
             const { code, state, device_id } = payload;
 
-            const response = await authCallback({
+            const response: AuthCallbackResponse = await authCallback({
               code,
               state,
               device_id,
               code_verifier: codeVerifier,
               redirect_uri: BASE_URL,
             });
+
+            if (response?.vkid) {
+              setVKID(response?.vkid);
+            }
 
             if (!response?.user_exists) {
               setVkData({ code, state, deviceID: device_id, codeVerifier });
@@ -60,6 +66,13 @@ export const VKIDButton = () => {
         );
     }
   }, []);
+
+  const handleSave = async () => {
+    setIsLoading(true);
+    await registerUser({ username, email, vkid });
+    setIsLoading(false);
+    setIsDialogOpen(false);
+  };
 
   return (
     <>
@@ -85,7 +98,9 @@ export const VKIDButton = () => {
           </div>
 
           <DialogFooter>
-            <Button>Save</Button>
+            <Button onClick={handleSave} disabled={isLoading}>
+              {isLoading ? 'Saving...' : 'Save'}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

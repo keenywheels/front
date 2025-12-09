@@ -10,4 +10,13 @@ export type AuthCallbackResponse = {
   user_exists: boolean;
   username: string;
   email: string;
+  vkid: number;
 };
+
+export type RegisterUserRequest = {
+  username: string;
+  email: string;
+  vkid: number;
+};
+
+export type RegisterUserResponse = object;
