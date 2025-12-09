@@ -11,6 +11,7 @@ export async function request<B, T>(
       signal: controller.signal,
       body: typeof body === 'object' ? JSON.stringify(body) : undefined,
       mode: 'cors',
+      credentials: 'include',
       headers: {
         'Content-type': 'application/json',
         ...headers,
