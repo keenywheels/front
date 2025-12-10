@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet } from 'react-router';
 
-import { AlertTriangle, Search } from 'lucide-react';
+import { AlertTriangle, Clock, Search } from 'lucide-react';
 
 import { routes } from '@shared/config/routes';
 import { useSidebarConfig } from '@shared/lib/hooks/use-sidebar-config';
@@ -11,6 +11,7 @@ import { HomeSidebar } from '@widgets/layouts/home-sidebar';
 const navigationItems = [
   { title: 'Поиск', url: routes.searchToken, icon: Search },
   { title: 'Алерты', url: '#', icon: AlertTriangle, disabled: true },
+  { title: 'История', url: '#', icon: Clock, disabled: true },
 ];
 
 const HomeLayout = () => {

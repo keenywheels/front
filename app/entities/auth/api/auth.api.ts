@@ -1,5 +1,7 @@
 import type { AuthCallbackRequest, AuthCallbackResponse } from '@entities/auth';
 import type {
+  LogoutUserRequest,
+  LogoutUserResponse,
   RegisterUserRequest,
   RegisterUserResponse,
 } from '@entities/auth/types/auth.types';
@@ -8,6 +10,7 @@ import { apiRoutes } from '@shared/config/routes';
 
 import {
   authCallbackResponseMock,
+  logoutUserResponseMock,
   registerUserResponseMock,
 } from './auth.mock';
 
@@ -57,6 +60,22 @@ export async function registerUser({
       apiRoutes.registerUser,
       'post',
       { username, email, vkid },
+    ),
+    {},
+  );
+}
+
+export async function logoutUser() {
+  const mock = await mockRequest<LogoutUserResponse>(logoutUserResponseMock);
+  if (mock) {
+    return mock;
+  }
+
+  return withDefault(
+    request<LogoutUserRequest, LogoutUserResponse>(
+      apiRoutes.logoutUser,
+      'post',
+      {},
     ),
     {},
   );

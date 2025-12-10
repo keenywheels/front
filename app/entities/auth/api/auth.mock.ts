@@ -1,5 +1,8 @@
 import { type AuthCallbackResponse } from '@entities/auth';
-import type { RegisterUserResponse } from '@entities/auth/types/auth.types';
+import type {
+  LogoutUserResponse,
+  RegisterUserResponse,
+} from '@entities/auth/types/auth.types';
 
 export const authCallbackResponseMock: AuthCallbackResponse = {
   user_exists: false,
@@ -9,3 +12,5 @@ export const authCallbackResponseMock: AuthCallbackResponse = {
 };
 
 export const registerUserResponseMock: RegisterUserResponse = {};
+
+export const logoutUserResponseMock: LogoutUserResponse = {};

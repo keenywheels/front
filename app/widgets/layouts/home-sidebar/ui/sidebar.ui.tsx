@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 
+import { useUser } from '@shared/lib/hooks/use-user';
 import {
   Sidebar as BaseSidebar,
   SidebarContent,
@@ -11,6 +12,7 @@ import {
   SidebarMenuItem,
 } from '@shared/ui/sidebar';
 
+import { SidebarFooter } from './sidebar-footer.ui';
 import type { SidebarItem } from './sidebar-item.ui';
 import { SidebarNavigation } from './sidebar-navigation.ui';
 
@@ -19,6 +21,8 @@ interface SidebarProps extends React.ComponentProps<typeof BaseSidebar> {
 }
 
 export const Sidebar = ({ navigationItems, ...props }: SidebarProps) => {
+  const { isAuthenticated } = useUser();
+
   return (
     <BaseSidebar {...props}>
       <SidebarHeader>
@@ -37,6 +41,7 @@ export const Sidebar = ({ navigationItems, ...props }: SidebarProps) => {
       <SidebarContent>
         <SidebarNavigation navigationItems={navigationItems} />
       </SidebarContent>
+      {isAuthenticated && <SidebarFooter />}
     </BaseSidebar>
   );
 };

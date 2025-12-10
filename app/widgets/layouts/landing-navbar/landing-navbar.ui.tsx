@@ -5,8 +5,9 @@ import { Link } from 'react-router';
 
 import { Home, Menu, Search, Star } from 'lucide-react';
 
-import { VKIDButton } from '@features/vkid-button';
+import { VKIDAuth } from '@features/vkid-auth';
 import { routes } from '@shared/config/routes';
+import { useUser } from '@shared/lib/hooks/use-user';
 import { cn } from '@shared/lib/utils/cls';
 import { Button } from '@shared/ui/button';
 import {
@@ -35,6 +36,7 @@ interface LandingNavbarProps {
 
 export const LandingNavbar = ({ className }: LandingNavbarProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { isAuthenticated } = useUser();
 
   return (
     <header
@@ -71,7 +73,18 @@ export const LandingNavbar = ({ className }: LandingNavbarProps) => {
         </NavigationMenu>
 
         <div className="hidden xl:flex items-center space-x-2">
-          <VKIDButton />
+          {isAuthenticated ? (
+            <Button className="text-base cursor-pointer">
+              <Link
+                to={routes.searchToken}
+                className="text-base cursor-pointer"
+              >
+                Личный кабинет
+              </Link>
+            </Button>
+          ) : (
+            <VKIDAuth containerID="vkid-desktop" />
+          )}
         </div>
 
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -116,7 +129,18 @@ export const LandingNavbar = ({ className }: LandingNavbarProps) => {
             </nav>
 
             <div className="p-6 flex-shrink-0">
-              <VKIDButton />
+              {isAuthenticated ? (
+                <Button size="lg" className="text-base cursor-pointer w-full">
+                  <Link
+                    to={routes.searchToken}
+                    className="text-base cursor-pointer"
+                  >
+                    Личный кабинет
+                  </Link>
+                </Button>
+              ) : (
+                <VKIDAuth containerID="vkid-desktop" />
+              )}
             </div>
           </SheetContent>
         </Sheet>

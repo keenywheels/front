@@ -11,4 +11,5 @@ export const apiRoutes = {
   searchToken: `${API_URL}/api/v1/token/search`,
   authCallback: `${API_URL}/api/v1/auth/vk/callback`,
   registerUser: `${API_URL}/api/v1/auth/vk/register`,
+  logoutUser: `${API_URL}/api/v1/auth/logout`,
 };

@@ -20,3 +20,7 @@ export type RegisterUserRequest = {
 };
 
 export type RegisterUserResponse = object;
+
+export type LogoutUserRequest = object;
+
+export type LogoutUserResponse = object;

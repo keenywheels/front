@@ -1,10 +1,5 @@
 'use client';
 
-import { Link } from 'react-router';
-
-import { routes } from '@shared/config/routes';
-import { Button } from '@shared/ui/button';
-
 import dashboardScreenshot from './dashboard.png';
 
 export const HeroSection = () => {
@@ -22,17 +17,6 @@ export const HeroSection = () => {
                 интереса и спрос. Поможем выбрать продукт или идею, которая
                 востребована на рынке
               </p>
-              <div className="flex flex-col gap-4 sm:flex-row sm:justify-center lg:justify-start">
-                <Button size="lg" className="text-base cursor-pointer" asChild>
-                  <Link
-                    key="Попробовать"
-                    to={routes.searchToken}
-                    className="text-base cursor-pointer"
-                  >
-                    Попробовать
-                  </Link>
-                </Button>
-              </div>
             </div>
           </div>
 
