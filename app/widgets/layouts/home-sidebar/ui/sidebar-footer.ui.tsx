@@ -1,6 +1,11 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
+
 import { ChevronUp, User2 } from 'lucide-react';
 
-import { logoutUser, useUserStore } from '@entities/auth';
+import { useUserStore } from '@entities/auth';
+import { apiRoutes, POST } from '@shared/api';
+import { routes } from '@shared/config/routes';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,13 +18,23 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@shared/ui/sidebar';
+import { Spinner } from '@shared/ui/spinner';
 
 export const SidebarFooter = () => {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const { user, logout } = useUserStore();
 
   const handleLogout = async () => {
+    try {
+      setIsLoading(true);
+      await POST(apiRoutes.logoutUser);
+    } finally {
+      setIsLoading(false);
+    }
+
     logout();
-    await logoutUser();
+    navigate(routes.landing);
   };
 
   return (
@@ -38,7 +53,7 @@ export const SidebarFooter = () => {
               className="w-[var(--radix-popper-anchor-width)]"
             >
               <DropdownMenuItem onClick={handleLogout}>
-                <span>Выйти</span>
+                {isLoading ? <Spinner className="w-4 h-4" /> : 'Выйти'}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

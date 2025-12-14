@@ -10,8 +10,8 @@ import { HomeSidebar } from '@widgets/layouts/home-sidebar';
 
 const navigationItems = [
   { title: 'Поиск', url: routes.searchToken, icon: Search },
+  { title: 'Сохраненные', url: routes.savedQueries, icon: Clock },
   { title: 'Алерты', url: '#', icon: AlertTriangle, disabled: true },
-  { title: 'История', url: '#', icon: Clock, disabled: true },
 ];
 
 const HomeLayout = () => {

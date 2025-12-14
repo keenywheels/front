@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   isRouteErrorResponse,
   Links,
@@ -6,10 +6,12 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useNavigate,
 } from 'react-router';
 
 import { SidebarConfigProvider } from '@shared/lib/providers/sidebar-config';
 import { ThemeProvider } from '@shared/lib/providers/theme';
+import { Notification } from '@widgets/notification';
 
 import type { Route } from './+types/root';
 
@@ -68,12 +70,27 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         </ThemeProvider>
         <ScrollRestoration />
         <Scripts />
+        <Notification />
       </body>
     </html>
   );
 };
 
 export const App = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleRedirect = (event: CustomEvent) => {
+      const { path } = event.detail;
+      navigate(path);
+    };
+
+    window.addEventListener('redirect', handleRedirect as EventListener);
+    return () => {
+      window.removeEventListener('redirect', handleRedirect as EventListener);
+    };
+  }, [navigate]);
+
   return <Outlet />;
 };
 

@@ -1,8 +1,9 @@
-import {
-  type SearchResult,
-  type SearchResultRecord,
-  searchToken,
-} from '@entities/token';
+import { type SearchResult, type SearchResultRecord } from '@entities/token';
+import { apiRoutes, POST } from '@shared/api';
+import type {
+  SearchTokenInfoRequest,
+  SearchTokenInfoResponse,
+} from '@shared/api/models';
 
 import { createQueryEval, extractTokens } from '../lib/query-parser.lib';
 
@@ -105,34 +106,54 @@ export const executeQuerySearch = async (
   try {
     const tokens = extractTokens(query);
     if (tokens.length === 0) {
-      const result = await searchToken({
-        token: query,
-        start: new Date(
-          new Date().setFullYear(new Date().getFullYear() - 1),
-        ).toISOString(),
+      const { data, error } = await POST(apiRoutes.searchToken, {
+        body: {
+          token: query,
+          start: new Date(
+            new Date().setFullYear(new Date().getFullYear() - 1),
+          ).toISOString(),
+        } as SearchTokenInfoRequest,
       });
-      if ('error' in result) {
+      if (error !== undefined) {
         return { error: `failed to fetch data for token: ${query}` };
       }
-      return result.length > 0 ? result[0] : { token: query, records: [] };
+
+      const response = data as unknown as SearchTokenInfoResponse;
+      if (response.length == 0) {
+        return { token: query, records: [] };
+      }
+
+      return response[0];
     }
 
     const evaluator = createQueryEval(query);
 
     const searchPromises = tokens.map((token) =>
-      searchToken({
-        token,
-        start: new Date(
-          new Date().setFullYear(new Date().getFullYear() - 1),
-        ).toISOString(),
+      POST(apiRoutes.searchToken, {
+        body: {
+          token: token,
+          start: new Date(
+            new Date().setFullYear(new Date().getFullYear() - 1),
+          ).toISOString(),
+        } as SearchTokenInfoRequest,
       }),
     );
     const results = await Promise.all(searchPromises);
 
     const allTimestamps = new Set<string>();
-    results.forEach((res) => {
-      if (Array.isArray(res) && res.length > 0 && res[0]) {
-        res[0].records.forEach((r) => allTimestamps.add(r.timestamp));
+    results.forEach(({ data, error }) => {
+      if (error) {
+        return { error: `failed to fetch data for token: ${query}` };
+      }
+
+      if (data && Array.isArray(data)) {
+        data.forEach((tokenInfo) => {
+          tokenInfo?.records?.forEach((record) => {
+            if (record?.timestamp) {
+              allTimestamps.add(record.timestamp);
+            }
+          });
+        });
       }
     });
 
@@ -152,7 +173,9 @@ export const executeQuerySearch = async (
     results.forEach((res, index) => {
       const tokenName = tokens[index];
       const records =
-        Array.isArray(res) && res.length > 0 && res[0] ? res[0].records : [];
+        Array.isArray(res.data) && res.data.length > 0 && res.data[0]
+          ? res.data[0].records
+          : [];
       denseTokenData[tokenName] = fillMissingDates(records, fullDateRange);
     });
 

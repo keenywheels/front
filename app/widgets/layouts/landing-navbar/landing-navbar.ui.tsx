@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 
 import { Home, Menu, Search, Star } from 'lucide-react';
 
-import { VKIDAuth } from '@features/vkid-auth';
+import { VKIDButton } from '@features/vkid-auth';
 import { routes } from '@shared/config/routes';
 import { useUser } from '@shared/lib/hooks/use-user';
 import { cn } from '@shared/lib/utils/cls';
@@ -83,7 +83,7 @@ export const LandingNavbar = ({ className }: LandingNavbarProps) => {
               </Link>
             </Button>
           ) : (
-            <VKIDAuth containerID="vkid-desktop" />
+            <VKIDButton containerID="vkid-desktop" />
           )}
         </div>
 
@@ -139,7 +139,7 @@ export const LandingNavbar = ({ className }: LandingNavbarProps) => {
                   </Link>
                 </Button>
               ) : (
-                <VKIDAuth containerID="vkid-desktop" />
+                <VKIDButton containerID="vkid-mobile" />
               )}
             </div>
           </SheetContent>
