@@ -15,7 +15,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
 
   const offset = (page - 1) * ITEMS_PER_PAGE;
 
-  const { data, error } = await GET(apiRoutes.savedQueries, {
+  const { data, error, response } = await GET(apiRoutes.savedQueries, {
     params: {
       query: {
         limit: ITEMS_PER_PAGE,
@@ -23,10 +23,14 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
       } as GetUserQueriesParams,
     },
   });
-  if (error !== undefined) {
+  if (error !== undefined && response.status != 404) {
     return { error };
   }
-  const queries = data as unknown as GetUserQueriesResponse;
+
+  let queries = data as unknown as GetUserQueriesResponse;
+  if (response.status === 404) {
+    queries = [];
+  }
 
   return {
     queries: queries,
