@@ -1,3 +1,4 @@
+import { RegisterDialog } from '@features/vkid-auth';
 import { LandingNavbar } from '@widgets/layouts/landing-navbar';
 
 import { FeaturesSection } from './features.ui';
@@ -13,6 +14,7 @@ export const LandingPage = () => {
         <FeaturesSection />
         <FooterSection />
       </main>
+      <RegisterDialog />
     </div>
   );
 };

@@ -6,5 +6,6 @@ export default [
   route('home', 'routes/home-layout.tsx', [
     route('search', 'routes/search-token.tsx'),
     route('search/result', 'routes/search-token-result.tsx'),
+    route('saved', 'routes/saved-queries.tsx'),
   ]),
 ] satisfies RouteConfig;
