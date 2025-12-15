@@ -9,6 +9,7 @@ import {
   useNavigate,
 } from 'react-router';
 
+import { useUserStore } from '@entities/auth';
 import { SidebarConfigProvider } from '@shared/lib/providers/sidebar-config';
 import { ThemeProvider } from '@shared/lib/providers/theme';
 import { Notification } from '@widgets/notification';
@@ -78,6 +79,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
 export const App = () => {
   const navigate = useNavigate();
+  const { logout } = useUserStore();
 
   useEffect(() => {
     const handleRedirect = (event: CustomEvent) => {
@@ -90,6 +92,17 @@ export const App = () => {
       window.removeEventListener('redirect', handleRedirect as EventListener);
     };
   }, [navigate]);
+
+  useEffect(() => {
+    const handleEvent = () => {
+      logout();
+    };
+
+    window.addEventListener('logout-user', handleEvent as EventListener);
+    return () => {
+      window.removeEventListener('logout-user', handleEvent as EventListener);
+    };
+  }, [logout]);
 
   return <Outlet />;
 };

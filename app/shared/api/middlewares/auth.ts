@@ -9,6 +9,8 @@ export const authMiddleware: Middleware = {
       return response;
     }
 
+    window.dispatchEvent(new CustomEvent('logout-user'));
+
     window.dispatchEvent(
       new CustomEvent('redirect', {
         detail: {
@@ -16,6 +18,7 @@ export const authMiddleware: Middleware = {
         },
       }),
     );
+
     toast.warning(
       'Вы не можете выполнить это действие. Авторизуйтесь и попробуйте снова',
     );
