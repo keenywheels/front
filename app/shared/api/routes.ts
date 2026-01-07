@@ -4,4 +4,5 @@ export const apiRoutes = {
   logoutUser: '/api/v1/auth/logout',
   searchToken: '/api/v1/token/search',
   savedQueries: '/api/v1/user/query',
+  getMe: '/api/v1/auth/me',
 };

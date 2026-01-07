@@ -28,3 +28,5 @@ export type SaveUserQueryResponse =
 
 export type DeleteUserQueryParams =
   operations['deleteUserSearchQuery']['parameters']['query'];
+
+export type GetMeResponse = components['schemas']['UserInfoResponse'];

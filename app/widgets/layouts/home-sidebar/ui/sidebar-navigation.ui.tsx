@@ -33,10 +33,10 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({
                     isActive={isActive && !item.disabled}
                     tooltip={item.title}
                     disabled={item.disabled}
-                    className="flex items-center gap-2 text-base min-h-[35px]"
+                    className="flex items-center gap-2 text-sm min-h-[35px]"
                   >
                     {item.icon && <item.icon className="w-6 h-6" />}
-                    <span className="ml-2">{item.title}</span>
+                    {item.title}
                     {item.disabled && (
                       <Lock className="w-4 h-4 text-muted-foreground ml-auto" />
                     )}

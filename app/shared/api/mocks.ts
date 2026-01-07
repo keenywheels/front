@@ -2,7 +2,6 @@ import { apiRoutes } from '@shared/api/routes';
 
 export const mockFetch = async (input: RequestInfo, init?: RequestInit) => {
   const url = input.url;
-  const method = input.method;
 
   if (url.includes(apiRoutes.searchToken)) {
     return new Response(
@@ -130,46 +129,6 @@ export const mockFetch = async (input: RequestInfo, init?: RequestInit) => {
         headers: { 'Content-Type': 'application/json' },
       },
     );
-  }
-
-  if (url.includes(apiRoutes.savedQueries) && method === 'GET') {
-    return new Response(
-      JSON.stringify([
-        {
-          id: 0,
-          query: 'telegram',
-          searchDate: '2025-12-13T16:00:55.217Z',
-        },
-        {
-          id: 1,
-          query: 'россия',
-          searchDate: '2025-12-13T16:01:17.465Z',
-        },
-      ]),
-      {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
-  }
-
-  if (url.includes(apiRoutes.savedQueries) && method === 'POST') {
-    return new Response(
-      JSON.stringify({
-        id: '1',
-      }),
-      {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
-  }
-
-  if (url.includes(apiRoutes.savedQueries) && method === 'DELETE') {
-    return new Response(JSON.stringify({}), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
   }
 
   return fetch(input, init);

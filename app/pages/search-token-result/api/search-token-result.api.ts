@@ -13,6 +13,13 @@ import type { Route } from './+types/search-token-result';
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
   const query = url.searchParams.get('query');
+  const category = url.searchParams.get('category') ?? undefined;
+
+  const start =
+    url.searchParams.get('start') ||
+    new Date(
+      new Date().setFullYear(new Date().getFullYear() - 1),
+    ).toISOString();
 
   if (!query) {
     toast.warning(
@@ -22,7 +29,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   }
 
   if (isQuery(query)) {
-    const result = await executeQuerySearch(query);
+    const result = await executeQuerySearch(query, start);
     if ('error' in result || !result?.records?.length) {
       toast.warning(
         'Мы не смогли ничего найти по вашему запросу. Пробоуйте что-то другое',
@@ -32,18 +39,11 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
     return [result];
   }
 
-  const start =
-    url.searchParams.get('start') ||
-    new Date(
-      new Date().setFullYear(new Date().getFullYear() - 1),
-    ).toISOString();
-  const end = url.searchParams.get('end') ?? undefined;
-
   return await POST(apiRoutes.searchToken, {
     body: {
       token: query,
+      category: category,
       start: start,
-      end: end,
     } as SearchTokenInfoRequest,
   });
 }

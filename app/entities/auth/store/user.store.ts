@@ -1,13 +1,16 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+type AuthStatus = 'unknown' | 'authenticated' | 'guest';
+
 export interface AuthUser {
-  vkid: number;
+  vkid?: number;
   username: string;
   email: string;
 }
 
 interface UserState {
+  status: AuthStatus;
   user?: AuthUser;
   pendingAuth?: {
     username: string;
@@ -26,11 +29,15 @@ interface UserState {
 export const useUserStore = create<UserState>()(
   persist(
     (set) => ({
+      status: 'unknown',
       user: undefined,
       pendingAuth: undefined,
-      setUser: (user) => set({ user, pendingAuth: undefined }),
-      setPendingAuth: (pending) => set({ pendingAuth: pending }),
-      logout: () => set({ user: undefined, pendingAuth: undefined }),
+      setUser: (user) =>
+        set({ status: 'authenticated', user, pendingAuth: undefined }),
+      setPendingAuth: (pending) =>
+        set({ status: 'guest', pendingAuth: pending }),
+      logout: () =>
+        set({ status: 'guest', user: undefined, pendingAuth: undefined }),
     }),
     { name: 'user' },
   ),

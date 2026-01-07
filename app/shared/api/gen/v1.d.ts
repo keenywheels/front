@@ -72,6 +72,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/v1/auth/me': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get info of logged in user */
+    get: operations['userInfo'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/v1/user/query': {
     parameters: {
       query?: never;
@@ -97,6 +114,7 @@ export interface components {
   schemas: {
     SearchTokenInfoRequest: {
       token: string;
+      category?: string;
       /** Format: date-time */
       start: string;
       /** Format: date-time */
@@ -104,6 +122,7 @@ export interface components {
     };
     TokenInfo: {
       token: string;
+      category: string;
       records: components['schemas']['TokenRecord'][];
     };
     TokenRecord: {
@@ -113,6 +132,8 @@ export interface components {
         interest: number;
         /** Format: float64 */
         interest_normalized: number;
+        /** Format: float64 */
+        interest_category: number;
         /** Format: int16 */
         sentiment: number;
       };
@@ -149,6 +170,10 @@ export interface components {
       query: string;
       /** Format: date-time */
       searchDate: string;
+    };
+    UserInfoResponse: {
+      username: string;
+      email: string;
     };
     Error: {
       error: string;
@@ -362,11 +387,49 @@ export interface operations {
       };
     };
   };
+  userInfo: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successfully got user info */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['UserInfoResponse'];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+    };
+  };
   getUserSearchQueries: {
     parameters: {
-      query: {
-        offset: number;
-        limit: number;
+      query?: {
+        offset?: number;
+        limit?: number;
       };
       header?: never;
       path?: never;
@@ -385,6 +448,15 @@ export interface operations {
       };
       /** @description Unauthorized */
       401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      /** @description Not found */
+      404: {
         headers: {
           [name: string]: unknown;
         };
