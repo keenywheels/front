@@ -19,8 +19,9 @@ export const SearchTokenQuery = () => {
   const isLoading = navigation.state === 'loading';
 
   useEffect(() => {
-    setQuery(searchParams.get('query') || '');
-  }, [searchParams]);
+    const urlQuery = searchParams.get('query');
+    setQuery(urlQuery ?? query);
+  }, [searchParams.get('query')]);
 
   const formatQuery = (input: string): string => {
     const trimmed = input.trim();

@@ -17,9 +17,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
 
   const start =
     url.searchParams.get('start') ||
-    new Date(
-      new Date().setFullYear(new Date().getFullYear() - 1),
-    ).toISOString();
+    new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
   if (!query) {
     toast.warning(
@@ -29,7 +27,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   }
 
   if (isQuery(query)) {
-    const result = await executeQuerySearch(query, start);
+    const result = await executeQuerySearch(query, category, start);
     if ('error' in result || !result?.records?.length) {
       toast.warning(
         'Мы не смогли ничего найти по вашему запросу. Пробоуйте что-то другое',
