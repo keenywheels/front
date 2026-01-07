@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useNavigation, useSearchParams } from 'react-router';
 
+import { InputWithTooltip } from '@app/shared/ui/input-with-tooltip';
 import { isQuery } from '@entities/token';
 import { routes } from '@shared/config/routes';
 import { Button } from '@shared/ui/button';
-import { Input } from '@shared/ui/input';
 import { Spinner } from '@shared/ui/spinner';
+
+import { FilterCategory } from './filter-category.ui';
+import { SearchFilters } from './filters.ui';
 
 export const SearchTokenQuery = () => {
   const [searchParams] = useSearchParams();
@@ -36,7 +39,7 @@ export const SearchTokenQuery = () => {
     }
 
     const formattedQuery = formatQuery(query);
-    const params = new URLSearchParams();
+    const params = new URLSearchParams(searchParams);
     params.set('query', formattedQuery);
 
     navigate({
@@ -46,19 +49,25 @@ export const SearchTokenQuery = () => {
   };
 
   return (
-    <form onSubmit={onSubmit} className="flex w-full items-center gap-2">
-      <Input
-        type="search"
-        placeholder="Токен или формула"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        required
-        className="flex-1"
-        aria-label="Поиск по токену или формуле"
-      />
-      <Button type="submit" disabled={isLoading} className="w-[100px]">
-        {isLoading ? <Spinner /> : 'Поиск'}
-      </Button>
+    <form onSubmit={onSubmit} className="w-full">
+      <div className="flex items-center gap-2">
+        <InputWithTooltip
+          type="search"
+          placeholder="Токен или формула"
+          tooltip="Можно вводить токены (например, vk) или формулы вида token('vk') / token('vixar') * 100 с операторами +, -, *, /"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          required
+          className="flex-1"
+        />
+        <Button type="submit" disabled={isLoading} className="w-[100px]">
+          {isLoading ? <Spinner /> : 'Поиск'}
+        </Button>
+      </div>
+
+      <SearchFilters>
+        <FilterCategory />
+      </SearchFilters>
     </form>
   );
 };

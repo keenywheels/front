@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   isRouteErrorResponse,
   Links,
@@ -6,15 +6,15 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useNavigate,
 } from 'react-router';
 
-import { useUserStore } from '@entities/auth';
+import { getMe, useUserStore } from '@entities/auth';
 import { SidebarConfigProvider } from '@shared/lib/providers/sidebar-config';
 import { ThemeProvider } from '@shared/lib/providers/theme';
 import { Notification } from '@widgets/notification';
 
 import type { Route } from './+types/root';
+import type { GetMeResponse } from './shared/api';
 
 import './app.css';
 
@@ -77,33 +77,27 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
+export async function clientLoader() {
+  const state = useUserStore.getState();
+  if (state.status !== 'unknown') {
+    return null;
+  }
+
+  const { data, error } = await getMe();
+  if (error !== undefined) {
+    state.logout();
+  } else {
+    const response = data as GetMeResponse;
+    state.setUser({
+      username: response.username,
+      email: response.email,
+    });
+  }
+
+  return null;
+}
+
 export const App = () => {
-  const navigate = useNavigate();
-  const { logout } = useUserStore();
-
-  useEffect(() => {
-    const handleRedirect = (event: CustomEvent) => {
-      const { path } = event.detail;
-      navigate(path);
-    };
-
-    window.addEventListener('redirect', handleRedirect as EventListener);
-    return () => {
-      window.removeEventListener('redirect', handleRedirect as EventListener);
-    };
-  }, [navigate]);
-
-  useEffect(() => {
-    const handleEvent = () => {
-      logout();
-    };
-
-    window.addEventListener('logout-user', handleEvent as EventListener);
-    return () => {
-      window.removeEventListener('logout-user', handleEvent as EventListener);
-    };
-  }, [logout]);
-
   return <Outlet />;
 };
 

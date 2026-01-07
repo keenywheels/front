@@ -6,7 +6,7 @@ import { AlertTriangle, Clock, Search } from 'lucide-react';
 import { routes } from '@shared/config/routes';
 import { useSidebarConfig } from '@shared/lib/hooks/use-sidebar-config';
 import { SidebarProvider } from '@shared/ui/sidebar';
-import { HomeSidebar } from '@widgets/layouts/home-sidebar';
+import { clientLoader, HomeSidebar } from '@widgets/layouts/home-sidebar';
 
 const navigationItems = [
   { title: 'Поиск', url: routes.searchToken, icon: Search },
@@ -38,4 +38,5 @@ const HomeLayout = () => {
   );
 };
 
+export { clientLoader };
 export default HomeLayout;

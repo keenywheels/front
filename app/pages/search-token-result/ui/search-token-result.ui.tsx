@@ -34,6 +34,7 @@ import {
 } from '@widgets/token-sentiment-chart';
 
 import type { Route } from './+types/search-token-result';
+import { IntervalSelect } from './interval-select.ui';
 
 const ResultSkeletons = () => (
   <div className="space-y-6">
@@ -63,6 +64,8 @@ export const SearchTokenResultPage = () => {
 
   const query = searchParams.get('query') || '';
   const isLoading = navigation.state === 'loading';
+
+  const interval = searchParams.get('interval') ?? '7d';
 
   const { isQuerySaved, saveQuery, removeQuery, getQueryID } =
     useSavedQueriesStore();
@@ -145,6 +148,9 @@ export const SearchTokenResultPage = () => {
           <ResultSkeletons />
         ) : (
           <>
+            <div className="flex justify-end mb-2">
+              <IntervalSelect />
+            </div>
             <TokenInterestChart
               data={interestData}
               title="Уровень интереса"
@@ -154,11 +160,13 @@ export const SearchTokenResultPage = () => {
                   color: 'var(--chart-1)',
                 },
               }}
+              timeRange={interval}
               className="h-[250px] w-full"
             />
             <SentimentChart
               data={sentimentData}
               title="Настроение аудитории"
+              timeRange={interval}
               className="h-[250px] w-full"
             />
           </>

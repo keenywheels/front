@@ -1,8 +1,16 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+interface QueryItem {
+  id: string;
+  query: string;
+}
+
 interface SavedQueriesStore {
   _items: Record<string, string>;
+
+  queries: QueryItem[];
+  setQueries: (queries: QueryItem[]) => void;
 
   getQueryID: (query: string) => string | undefined;
   isQuerySaved: (query: string) => boolean;
@@ -15,6 +23,20 @@ export const useSavedQueriesStore = create<SavedQueriesStore>()(
     (set, get) => ({
       _items: {},
 
+      queries: [],
+      setQueries: (queries: QueryItem[]) => {
+        set({
+          queries,
+          _items: queries.reduce(
+            (acc, q) => {
+              acc[q.query] = q.id;
+              return acc;
+            },
+            {} as Record<string, string>,
+          ),
+        });
+      },
+
       getQueryID: (query: string) => {
         return get()._items[query];
       },
@@ -26,6 +48,7 @@ export const useSavedQueriesStore = create<SavedQueriesStore>()(
       saveQuery: (id: string, query: string) => {
         set((state) => ({
           _items: { ...state._items, [query]: id },
+          queries: [...state.queries, { id, query }],
         }));
       },
 
@@ -33,7 +56,10 @@ export const useSavedQueriesStore = create<SavedQueriesStore>()(
         set((state) => {
           const newItems = { ...state._items };
           delete newItems[query];
-          return { _items: newItems };
+          return {
+            _items: newItems,
+            queries: state.queries.filter((q) => q.query !== query),
+          };
         });
       },
     }),

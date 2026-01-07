@@ -2,6 +2,7 @@ export { DELETE, GET, POST, PUT } from './client';
 export type {
   DeleteUserQueryParams,
   ErrorResponse,
+  GetMeResponse,
   GetUserQueriesParams,
   GetUserQueriesResponse,
   SaveUserQueryRequest,

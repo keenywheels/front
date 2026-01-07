@@ -102,6 +102,7 @@ const fillMissingDates = (
 
 export const executeQuerySearch = async (
   query: string,
+  start?: string,
 ): Promise<SearchResult | { error: string }> => {
   try {
     const tokens = extractTokens(query);
@@ -109,9 +110,7 @@ export const executeQuerySearch = async (
       const { data, error } = await POST(apiRoutes.searchToken, {
         body: {
           token: query,
-          start: new Date(
-            new Date().setFullYear(new Date().getFullYear() - 1),
-          ).toISOString(),
+          start: start,
         } as SearchTokenInfoRequest,
       });
       if (error !== undefined) {
@@ -132,9 +131,7 @@ export const executeQuerySearch = async (
       POST(apiRoutes.searchToken, {
         body: {
           token: token,
-          start: new Date(
-            new Date().setFullYear(new Date().getFullYear() - 1),
-          ).toISOString(),
+          start: start,
         } as SearchTokenInfoRequest,
       }),
     );
