@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useNavigation, useSearchParams } from 'react-router';
 
 import { InputWithTooltip } from '@app/shared/ui/input-with-tooltip';
-import { isQuery } from '@entities/token';
 import { routes } from '@shared/config/routes';
 import { Button } from '@shared/ui/button';
 import { Spinner } from '@shared/ui/spinner';
@@ -25,12 +24,7 @@ export const SearchTokenQuery = () => {
 
   const formatQuery = (input: string): string => {
     const trimmed = input.trim();
-
-    if (isQuery(trimmed)) {
-      return trimmed;
-    } else {
-      return `token('${trimmed}')`;
-    }
+    return trimmed;
   };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {

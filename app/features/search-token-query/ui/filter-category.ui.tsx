@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 
+import { categoryOptions } from '@app/entities/category';
 import {
   Select,
   SelectContent,
@@ -8,12 +9,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@shared/ui/select';
-
-const CATEGORIES = [
-  { value: 'news', label: 'Новости' },
-  { value: 'marketplace', label: 'Маркетплейсы' },
-  { value: 'review', label: 'Отзывы' },
-];
 
 export const FilterCategory = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -41,7 +36,7 @@ export const FilterCategory = () => {
         </SelectTrigger>
 
         <SelectContent>
-          {CATEGORIES.map((item) => (
+          {categoryOptions.map((item) => (
             <SelectItem
               key={item.value}
               value={item.value}

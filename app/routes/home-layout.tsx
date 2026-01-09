@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet } from 'react-router';
 
-import { AlertTriangle, Clock, Search } from 'lucide-react';
+import { Bell, Clock, Search } from 'lucide-react';
 
 import { routes } from '@shared/config/routes';
 import { useSidebarConfig } from '@shared/lib/hooks/use-sidebar-config';
@@ -11,7 +11,7 @@ import { clientLoader, HomeSidebar } from '@widgets/layouts/home-sidebar';
 const navigationItems = [
   { title: 'Поиск', url: routes.searchToken, icon: Search },
   { title: 'Сохраненные', url: routes.savedQueries, icon: Clock },
-  { title: 'Алерты', url: '#', icon: AlertTriangle, disabled: true },
+  { title: 'Подписки', url: routes.tokenSubscriptions, icon: Bell },
 ];
 
 const HomeLayout = () => {
