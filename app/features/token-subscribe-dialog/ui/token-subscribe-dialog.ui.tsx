@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 
 import { mapCategoryToLabel } from '@app/entities/category';
 import { methodOptions } from '@app/entities/method';
+import { useTokenSubscriptionsStore } from '@app/entities/token-subscription';
 import {
   Select,
   SelectContent,
@@ -13,7 +14,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@app/shared/ui/select';
-import { apiRoutes, POST, type SubscribeUserToTokenRequest } from '@shared/api';
+import {
+  apiRoutes,
+  POST,
+  type SubscribeUserToTokenRequest,
+  type UserTokenSub,
+} from '@shared/api';
 import { Button } from '@shared/ui/button';
 import {
   Dialog,
@@ -43,20 +49,25 @@ export const TokenSubscribeDialog = ({
   const [threshold, setThreshold] = useState<number>(1.2);
   const [method, setMethod] = useState<string>();
 
+  const { subscribe } = useTokenSubscriptionsStore();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
       setIsLoading(true);
 
-      const { error, response } = await POST(apiRoutes.tokenSubscriptions, {
-        body: {
-          token: token,
-          category: category,
-          threshold: threshold,
-          method: method,
-        } as SubscribeUserToTokenRequest,
-      });
+      const { data, error, response } = await POST(
+        apiRoutes.tokenSubscriptions,
+        {
+          body: {
+            token: token,
+            category: category,
+            threshold: threshold,
+            method: method,
+          } as SubscribeUserToTokenRequest,
+        },
+      );
       if (response.status === 400) {
         toast.warning(
           'Вы ввели некорретные данные. Исправьте и попробуйте снова',
@@ -74,6 +85,17 @@ export const TokenSubscribeDialog = ({
         );
         return;
       }
+
+      const subscription = data as unknown as UserTokenSub;
+      subscribe(
+        subscription.id,
+        subscription.token,
+        subscription.category,
+        subscription.method,
+        subscription.current_interest,
+        subscription.previous_interest,
+        subscription.last_scan,
+      );
 
       toast.success('Вы успешно подписались на токен');
       onOpenChange(false);

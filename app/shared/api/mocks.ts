@@ -2,6 +2,7 @@ import { apiRoutes } from '@shared/api/routes';
 
 export const mockFetch = async (input: RequestInfo, init?: RequestInit) => {
   const url = input.url;
+  const method = input.method;
 
   if (url.includes(apiRoutes.searchToken)) {
     return new Response(
@@ -123,6 +124,26 @@ export const mockFetch = async (input: RequestInfo, init?: RequestInit) => {
               },
             },
           ],
+        },
+      ]),
+      {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      },
+    );
+  }
+
+  if (url.includes(apiRoutes.tokenSubscriptions) && method === 'GET') {
+    return new Response(
+      JSON.stringify([
+        {
+          id: '768a2a1a-d249-4567-8eab-1caf246f3165',
+          token: 'россия',
+          category: 'news',
+          method: 'denormalized',
+          current_interest: 55,
+          previous_interest: 0,
+          last_scan: '2026-01-09T00:00:00Z',
         },
       ]),
       {

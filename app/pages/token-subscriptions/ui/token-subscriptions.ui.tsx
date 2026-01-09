@@ -115,7 +115,7 @@ export const TokenSubscriptionsPage = () => {
                     </Badge>
 
                     <Badge variant="outline">
-                      {mapMethodToLabel[subscription.method]}
+                      {mapMethodToLabel(subscription.method)}
                     </Badge>
                   </div>
                 </div>
