@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Navigate,
   useLoaderData,
@@ -5,12 +6,15 @@ import {
   useSearchParams,
 } from 'react-router';
 
-import { Bookmark, BookmarkCheck } from 'lucide-react';
+import { Bell, BellRing, Bookmark, BookmarkCheck } from 'lucide-react';
 import { toast } from 'sonner';
 
+import { useTokenSubscriptionsStore } from '@app/entities/token-subscription';
+import type { DeleteUserTokenSubParams } from '@app/shared/api/models';
 import { useSavedQueriesStore } from '@entities/auth/store/query.store';
-import type { SearchResult, SearchResultRecord } from '@entities/token';
+import { isQuery, type SearchResultRecord } from '@entities/token';
 import { SearchTokenQuery } from '@features/search-token-query';
+import { TokenSubscribeDialog } from '@features/token-subscribe-dialog';
 import {
   apiRoutes,
   DELETE,
@@ -18,6 +22,7 @@ import {
   POST,
   type SaveUserQueryRequest,
   type SaveUserQueryResponse,
+  type TokenInfo,
 } from '@shared/api';
 import { routes } from '@shared/config/routes';
 import { Button } from '@shared/ui/button';
@@ -70,13 +75,19 @@ export const SearchTokenResultPage = () => {
   const { isQuerySaved, saveQuery, removeQuery, getQueryID } =
     useSavedQueriesStore();
 
-  if ('error' in loaderData) {
+  const { isTokenSubscribed, getSubscriptionID, unsubscribe } =
+    useTokenSubscriptionsStore();
+  const [isSubscribeDialogOpen, setIsSubscribeDialogOpen] = useState(false);
+
+  if ('error' in loaderData && loaderData.response.status !== 404) {
     console.error('loader error:', loaderData.error);
     return <Navigate to={routes.searchToken} replace />;
   }
 
-  const tokenInfo: SearchResult =
-    loaderData.length > 0 ? loaderData[0] : { token: query, records: [] };
+  const tokenInfo: TokenInfo =
+    loaderData.data.length > 0
+      ? loaderData.data[0]
+      : { token: query, records: [] };
 
   const interestData: TokenInterestChartDataItem[] = tokenInfo.records.map(
     (item: SearchResultRecord) => ({
@@ -122,56 +133,99 @@ export const SearchTokenResultPage = () => {
     }
   };
 
+  const handleTokenSubscribe = async (token: string) => {
+    const isSubscribed = isTokenSubscribed(token);
+    const subscriptionID = getSubscriptionID(token);
+
+    if (isSubscribed) {
+      const { error } = await DELETE(apiRoutes.tokenSubscriptions, {
+        params: {
+          query: { id: subscriptionID } as unknown as DeleteUserTokenSubParams,
+        },
+      });
+      if (error) {
+        toast.error('Не получилось отписаться от токена. Попробуйте позже');
+        return;
+      }
+      unsubscribe(token);
+    } else {
+      setIsSubscribeDialogOpen(true);
+    }
+  };
+
   return (
-    <div className="@container/main flex flex-1 flex-col px-4 md:px-6">
-      <div className="w-full mx-auto space-y-6">
-        <div className="flex items-center">
-          <Label className="text-2xl font-bold">Аналитика: {query}</Label>
+    <>
+      <div className="@container/main flex flex-1 flex-col px-4 md:px-6">
+        <div className="w-full mx-auto space-y-6">
+          <div className="flex items-center">
+            <Label className="text-2xl font-bold">Аналитика: {query}</Label>
 
-          <Button
-            variant="default"
-            size="icon-sm"
-            onClick={() => handleSaveQuery(query)}
-            className="bg-transparent text-foreground hover:bg-muted hover:text-foreground ml-2"
-          >
-            {isQuerySaved(query) ? (
-              <BookmarkCheck className="h-6 w-6" />
-            ) : (
-              <Bookmark className="h-6 w-6" />
+            <Button
+              variant="default"
+              size="icon-sm"
+              onClick={() => handleSaveQuery(query)}
+              className="bg-transparent text-foreground hover:bg-muted hover:text-foreground ml-2"
+            >
+              {isQuerySaved(query) ? (
+                <BookmarkCheck className="h-6 w-6" />
+              ) : (
+                <Bookmark className="h-6 w-6" />
+              )}
+            </Button>
+
+            {!isQuery(query) && (
+              <Button
+                variant="default"
+                size="icon-sm"
+                onClick={() => handleTokenSubscribe(query)}
+                className="bg-transparent text-foreground hover:bg-muted hover:text-foreground ml-2"
+              >
+                {isTokenSubscribed(query) ? (
+                  <BellRing className="h-6 w-6" />
+                ) : (
+                  <Bell className="h-6 w-6" />
+                )}
+              </Button>
             )}
-          </Button>
+          </div>
+
+          <SearchTokenQuery />
+
+          {isLoading ? (
+            <ResultSkeletons />
+          ) : (
+            <>
+              <div className="flex justify-end mb-2">
+                <IntervalSelect />
+              </div>
+              <TokenInterestChart
+                data={interestData}
+                title="Уровень интереса"
+                lines={{
+                  value: {
+                    label: 'Уровень интереса',
+                    color: 'var(--chart-1)',
+                  },
+                }}
+                timeRange={interval}
+                className="h-[250px] w-full"
+              />
+              <SentimentChart
+                data={sentimentData}
+                title="Настроение аудитории"
+                timeRange={interval}
+                className="h-[250px] w-full"
+              />
+            </>
+          )}
         </div>
-
-        <SearchTokenQuery />
-
-        {isLoading ? (
-          <ResultSkeletons />
-        ) : (
-          <>
-            <div className="flex justify-end mb-2">
-              <IntervalSelect />
-            </div>
-            <TokenInterestChart
-              data={interestData}
-              title="Уровень интереса"
-              lines={{
-                value: {
-                  label: 'Уровень интереса',
-                  color: 'var(--chart-1)',
-                },
-              }}
-              timeRange={interval}
-              className="h-[250px] w-full"
-            />
-            <SentimentChart
-              data={sentimentData}
-              title="Настроение аудитории"
-              timeRange={interval}
-              className="h-[250px] w-full"
-            />
-          </>
-        )}
       </div>
-    </div>
+      <TokenSubscribeDialog
+        token={tokenInfo.token}
+        category={tokenInfo.category}
+        open={isSubscribeDialogOpen}
+        onOpenChange={setIsSubscribeDialogOpen}
+      />
+    </>
   );
 };

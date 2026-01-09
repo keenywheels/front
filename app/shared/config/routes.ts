@@ -3,6 +3,7 @@ export const routes = {
   searchToken: '/home/search',
   searchResult: '/home/search/result',
   savedQueries: '/home/saved',
+  tokenSubscriptions: '/home/subscriptions',
 };
 
 export const BASE_URL = import.meta.env.VXR_BASE_URL;

@@ -34,14 +34,22 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
       );
       throw redirect(routes.searchToken);
     }
-    return [result];
+    return {
+      data: [result],
+    };
   }
 
-  return await POST(apiRoutes.searchToken, {
+  const result = await POST(apiRoutes.searchToken, {
     body: {
       token: query,
       category: category,
       start: start,
     } as SearchTokenInfoRequest,
   });
+
+  if (result?.response.status === 404) {
+    result.data = [];
+  }
+
+  return result;
 }

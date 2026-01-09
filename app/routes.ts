@@ -7,5 +7,6 @@ export default [
     route('search', 'routes/search-token.tsx'),
     route('search/result', 'routes/search-token-result.tsx'),
     route('saved', 'routes/saved-queries.tsx'),
+    route('subscriptions', 'routes/token-subscriptions.tsx'),
   ]),
 ] satisfies RouteConfig;

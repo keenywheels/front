@@ -30,3 +30,19 @@ export type DeleteUserQueryParams =
   operations['deleteUserSearchQuery']['parameters']['query'];
 
 export type GetMeResponse = components['schemas']['UserInfoResponse'];
+
+// token subscriptions
+
+export type UserTokenSub = components['schemas']['UserTokenSub'];
+
+export type GetUserTokenSubsParams =
+  operations['getUserTokenSubs']['parameters']['query'];
+export type GetUserTokenSubsResponse = UserTokenSub[];
+
+export type SubscribeUserToTokenRequest =
+  components['schemas']['SubscribeUserToTokenRequest'];
+export type SubscribeUserToTokenResponse =
+  components['schemas']['SubscribeUserToTokenResponse'];
+
+export type DeleteUserTokenSubParams =
+  operations['deleteUserTokenSub']['parameters']['query'];

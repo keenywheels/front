@@ -8,6 +8,7 @@ export const mockFetch = async (input: RequestInfo, init?: RequestInit) => {
       JSON.stringify([
         {
           token: 'россия',
+          category: 'news',
           records: [
             {
               timestamp: '2025-11-30',
