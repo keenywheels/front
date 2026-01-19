@@ -141,6 +141,7 @@ export const mockFetch = async (input: RequestInfo, init?: RequestInit) => {
           token: 'россия',
           category: 'news',
           method: 'denormalized',
+          threshold: 1.5,
           current_interest: 55,
           previous_interest: 0,
           last_scan: '2026-01-09T00:00:00Z',

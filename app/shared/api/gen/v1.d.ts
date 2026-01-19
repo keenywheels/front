@@ -117,7 +117,8 @@ export interface paths {
     };
     /** Get user's token subs */
     get: operations['getUserTokenSubs'];
-    put?: never;
+    /** Update user's token subscription */
+    put: operations['updateUserTokenSub'];
     /** Subscribe user to specified token */
     post: operations['subscribeUserToToken'];
     /** Delete user's token subscription */
@@ -209,11 +210,24 @@ export interface components {
       category: string;
       method: string;
       /** Format: float64 */
+      threshold: number;
+      /** Format: float64 */
       current_interest: number;
       /** Format: float64 */
       previous_interest: number;
       /** Format: date-time */
       last_scan: string;
+    };
+    UpdateUserTokenSubRequest: {
+      id: string;
+      threshold: number;
+      method: string;
+    };
+    UpdateUserTokenSubResponse: {
+      /** Format: float64 */
+      current_interest: number;
+      /** Format: float64 */
+      previous_interest: number;
     };
     Error: {
       error: string;
@@ -663,6 +677,66 @@ export interface operations {
       };
     };
   };
+  updateUserTokenSub: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateUserTokenSubRequest'];
+      };
+    };
+    responses: {
+      /** @description Successfully updated user's token sub */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['UpdateUserTokenSubResponse'];
+        };
+      };
+      /** @description Bad request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      /** @description Not found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+    };
+  };
   subscribeUserToToken: {
     parameters: {
       query?: never;
@@ -696,6 +770,15 @@ export interface operations {
       };
       /** @description Unauthorized */
       401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      /** @description Token not found */
+      404: {
         headers: {
           [name: string]: unknown;
         };
