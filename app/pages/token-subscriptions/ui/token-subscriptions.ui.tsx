@@ -117,6 +117,11 @@ export const TokenSubscriptionsPage = () => {
                     <Badge variant="outline">
                       {mapMethodToLabel(subscription.method)}
                     </Badge>
+
+                    <Badge variant="outline">
+                      Уведомить при изменении на{' '}
+                      {Math.round((subscription.threshold - 1) * 100)}%
+                    </Badge>
                   </div>
                 </div>
 
